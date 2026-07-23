@@ -23,9 +23,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Username and password required" });
     }
 
-    if (process.env.UPSTASH_REDIS_REST_URL) {
+    if (process.env.KV_REST_API_URL) {
       const { default: Redis } = await import("@upstash/redis");
-      const client = new Redis({ url: process.env.UPSTASH_REDIS_REST_URL, token: process.env.UPSTASH_REDIS_REST_TOKEN });
+      const client = new Redis({ url: process.env.KV_REST_API_URL, token: process.env.KV_REST_API_TOKEN });
       const existing = await client.get(`user:${username}`);
       if (existing) {
         return res.status(409).json({ error: "Username already exists" });
