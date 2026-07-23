@@ -1,0 +1,9 @@
+{
+  "name": "login-penetration",
+  "version": "1.0.0",
+  "description": "Simple login website deployed on Vercel",
+  "private": true,
+  "dependencies": {
+    "@upstash/redis": "^1.34.0"
+  }
+}
