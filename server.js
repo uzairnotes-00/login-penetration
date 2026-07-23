@@ -11,9 +11,16 @@ const app = express();
 app.use(express.json());
 app.use(express.static(__dirname));
 
-app.all("/api/signup", (req, res) => signup(req, res));
-app.all("/api/login", (req, res) => login(req, res));
-app.all("/api/users", (req, res) => users(req, res));
+function wrap(fn) {
+  return (req, res) => Promise.resolve(fn(req, res)).catch((err) => {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  });
+}
+
+app.all("/api/signup", wrap(signup));
+app.all("/api/login", wrap(login));
+app.all("/api/users", wrap(users));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
