@@ -86,41 +86,53 @@
     }
 
     async function signup() {
-      const username = document.getElementById('signupUser').value.trim();
-      const password = document.getElementById('signupPass').value;
-      if (!username || !password) return showMessage('Fill in all fields', 'error');
+      try {
+        const username = document.getElementById('signupUser').value.trim();
+        const password = document.getElementById('signupPass').value;
+        if (!username || !password) return showMessage('Fill in all fields', 'error');
 
-      const res = await fetch('/api/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-      const data = await res.json();
-      showMessage(data.message || data.error, res.ok ? 'success' : 'error');
-      if (res.ok) loadUsers();
+        const res = await fetch('/api/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        showMessage(data.message || data.error, res.ok ? 'success' : 'error');
+        if (res.ok) loadUsers();
+      } catch (err) {
+        showMessage('Error: ' + err.message, 'error');
+      }
     }
 
     async function login() {
-      const username = document.getElementById('loginUser').value.trim();
-      const password = document.getElementById('loginPass').value;
-      if (!username || !password) return showMessage('Fill in all fields', 'error');
+      try {
+        const username = document.getElementById('loginUser').value.trim();
+        const password = document.getElementById('loginPass').value;
+        if (!username || !password) return showMessage('Fill in all fields', 'error');
 
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-      const data = await res.json();
-      showMessage(data.message || data.error, res.ok ? 'success' : 'error');
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        showMessage(data.message || data.error, res.ok ? 'success' : 'error');
+      } catch (err) {
+        showMessage('Error: ' + err.message, 'error');
+      }
     }
 
     async function loadUsers() {
-      const res = await fetch('/api/users');
-      const users = await res.json();
-      const el = document.getElementById('usersList');
-      if (users.length === 0) { el.innerHTML = ''; return; }
-      el.innerHTML = '<h3>Registered Users</h3>' +
-        users.map(u => `<div class="user-item">${u.username} &mdash; ${new Date(u.createdAt).toLocaleString()}</div>`).join('');
+      try {
+        const res = await fetch('/api/users');
+        const users = await res.json();
+        const el = document.getElementById('usersList');
+        if (users.length === 0) { el.innerHTML = ''; return; }
+        el.innerHTML = '<h3>Registered Users</h3>' +
+          users.map(u => `<div class="user-item">${u.username} &mdash; ${new Date(u.createdAt).toLocaleString()}</div>`).join('');
+      } catch (err) {
+        // silent — API may not be available on page load
+      }
     }
 
     loadUsers();
