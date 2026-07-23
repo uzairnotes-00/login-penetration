@@ -12,11 +12,6 @@ function saveUsers(users) {
   fs.writeFileSync(DB_FILE, JSON.stringify(users, null, 2));
 }
 
-function getRedis() {
-  if (!process.env.UPSTASH_REDIS_REST_URL) return null;
-  return null;
-}
-
 export default async function handler(req, res) {
   try {
     if (req.method !== "POST") {
@@ -28,8 +23,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Username and password required" });
     }
 
-    const redis = getRedis();
-    if (redis) {
+    if (process.env.UPSTASH_REDIS_REST_URL) {
       const { default: Redis } = await import("@upstash/redis");
       const client = new Redis({ url: process.env.UPSTASH_REDIS_REST_URL, token: process.env.UPSTASH_REDIS_REST_TOKEN });
       const existing = await client.get(`user:${username}`);
