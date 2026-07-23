@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     }
 
     if (process.env.KV_REST_API_URL) {
-      const { default: Redis } = await import("@upstash/redis");
+      const { Redis } = await import("@upstash/redis");
       const client = new Redis({ url: process.env.KV_REST_API_URL, token: process.env.KV_REST_API_TOKEN });
       const raw = await client.get(`user:${username}`);
       if (!raw) {
