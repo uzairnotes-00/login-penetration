@@ -116,7 +116,12 @@
           body: JSON.stringify({ username, password })
         });
         const data = await res.json();
-        showMessage(data.message || data.error, res.ok ? 'success' : 'error');
+        if (res.ok) {
+          localStorage.setItem('forumUser', data.username);
+          window.location.href = '/forum.html';
+        } else {
+          showMessage(data.error, 'error');
+        }
       } catch (err) {
         showMessage('Error: ' + err.message, 'error');
       }

@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import signup from "./api/signup.js";
 import login from "./api/login.js";
 import users from "./api/users.js";
+import threads from "./api/threads.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -21,6 +22,7 @@ function wrap(fn) {
 app.all("/api/signup", wrap(signup));
 app.all("/api/login", wrap(login));
 app.all("/api/users", wrap(users));
+app.all("/api/threads", wrap(threads));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
